@@ -555,3 +555,134 @@ iframe:focus-visible {
     color: LinkText;
   }
 }
+
+.script-note {
+  max-width: 42rem;
+}
+
+.script-actions {
+  margin: 0.4rem 0 0;
+}
+
+.script-actions .bevel,
+.script-download .bevel {
+  width: auto;
+  max-width: 100%;
+  display: inline-flex;
+  white-space: normal;
+}
+
+.script-download {
+  margin: 0.2rem 0 1.4rem;
+}
+
+.script-text {
+  max-width: 72ch;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  overflow-wrap: break-word;
+}
+
+.script-text p {
+  margin: 0 0 1.15rem;
+  overflow-wrap: break-word;
+}
+
+.script-text .script-titleline {
+  font-weight: 700;
+}
+
+.chapter {
+  margin: 2.4rem 0 1rem;
+  font-size: 1.35rem;
+  line-height: 1.35;
+  text-align: left;
+  letter-spacing: 0.02em;
+  overflow-wrap: break-word;
+}
+
+.chapter-num,
+.script-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: #f3e7ff;
+}
+
+.script-label {
+  margin: 1.6rem 0 1rem;
+  text-align: center;
+}
+
+.script-text hr {
+  width: 6rem;
+  margin: 1.75rem auto;
+  border: 0;
+  border-top: 1px solid var(--silver-soft);
+}
+
+.script-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.85rem 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+}
+
+.script-pager a {
+  font-weight: 700;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.pager-next {
+  margin-left: auto;
+}
+
+.script-index {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+}
+
+.script-index li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.9rem;
+  padding: 0.75rem 0.15rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.script-index li:last-child {
+  border-bottom: 0;
+}
+
+.script-index-title {
+  flex: 1 1 14rem;
+  font-weight: 700;
+  overflow-wrap: break-word;
+}
+
+.script-index a {
+  font-weight: 700;
+  padding: 0.35rem 0.1rem;
+}
+
+@media (max-width: 600px) {
+  .script-actions .bevel,
+  .script-download .bevel {
+    width: 100%;
+  }
+
+  .pager-next {
+    margin-left: 0;
+  }
+
+  .script-index-title {
+    flex-basis: 100%;
+  }
+}
