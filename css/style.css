@@ -471,6 +471,15 @@ main:focus-visible {
   flex: none;
 }
 
+.visit-count {
+  margin: 0.9rem 0 0;
+  text-align: left;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  font-weight: 400;
+  color: var(--silver-soft);
+}
+
 .side p,
 .panel p {
   color: #f3eef8;
