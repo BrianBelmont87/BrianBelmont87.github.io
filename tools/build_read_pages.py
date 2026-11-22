@@ -287,6 +287,7 @@ def chrome(prefix, current_scripts):
           </a>
         </li>
       </ul>
+      <p class="visit-count">Visitors: <span data-visits>—</span></p>
     </footer>
   </div>
 """
@@ -312,6 +313,7 @@ def page_shell(title, description, prefix, body, current_scripts=True):
       </main>
 
 {foot}
+  <script src="{prefix}js/visits.js" defer></script>
 </body>
 </html>
 """
