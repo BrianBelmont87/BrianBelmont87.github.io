@@ -112,7 +112,7 @@ def load_catalog():
         else:
             label = f"Ep {episode:02d} – {name}"
         listen = None
-        if season == 6 and part is None and 8 <= episode <= 15:
+        if season == 6 and part is None and 8 <= episode <= 16:
             listen = f"ep-{episode:02d}"
         items.append({
             "season": season,
