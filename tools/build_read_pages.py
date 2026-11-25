@@ -287,7 +287,7 @@ def chrome(prefix, current_scripts):
           </a>
         </li>
       </ul>
-      <p class="visit-count">Visitors: <span data-visits>—</span></p>
+      <p class="visit-count">Visitors: <span data-visits>156</span></p>
     </footer>
   </div>
 """

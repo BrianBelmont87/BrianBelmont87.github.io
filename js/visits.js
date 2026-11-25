@@ -1,42 +1,61 @@
 /* Site-wide page views. One small request, no cookies, no animation.
-   The previous Abacus counter often never answered from a browser, so the
-   footer stayed on the dash. This uses tick.rs instead. The old total could
-   not be copied, so the number starts again. */
+   Shown total = 156 (the old Abacus count) + the tick.rs count.
+   If tick.rs does not answer, the line stays at 156. It never shows a dash
+   and never goes below that old total. */
 (function () {
   var slot = document.querySelector("[data-visits]");
   if (!slot || !window.fetch) {
     return;
   }
 
-  var controller = typeof AbortController === "function" ? new AbortController() : null;
-  var timer = controller ? window.setTimeout(function () { controller.abort(); }, 6000) : 0;
+  var previousTotal = 156;
+  var tick = "https://tick.rs/c/o8w64MeiLWZQ";
 
-  fetch("https://tick.rs/c/o8w64MeiLWZQ", {
-    method: "POST",
-    credentials: "omit",
-    cache: "no-store",
-    referrerPolicy: "no-referrer",
-    signal: controller ? controller.signal : undefined
-  })
-    .then(function (response) {
+  function show(tickCount) {
+    var extra = Number(tickCount);
+    if (!isFinite(extra) || extra < 0) {
+      extra = 0;
+    }
+    var total = previousTotal + extra;
+    if (total < previousTotal) {
+      total = previousTotal;
+    }
+    slot.textContent = total.toLocaleString("en-US");
+  }
+
+  function giveUp(ms) {
+    return new Promise(function (_, reject) {
+      window.setTimeout(function () { reject(new Error("timeout")); }, ms);
+    });
+  }
+
+  function readTick() {
+    var request = fetch(tick, {
+      method: "GET",
+      credentials: "omit",
+      cache: "no-store"
+    }).then(function (response) {
       if (!response.ok) {
-        throw new Error("counter");
+        throw new Error("status");
       }
       return response.text();
-    })
-    .then(function (text) {
-      var value = Number(String(text).trim());
-      if (!isFinite(value)) {
-        return;
-      }
-      slot.textContent = value.toLocaleString("en-US");
-    })
-    .catch(function () {
-      slot.textContent = "—";
-    })
-    .then(function () {
-      if (timer) {
-        window.clearTimeout(timer);
-      }
     });
+    return Promise.race([request, giveUp(8000)]);
+  }
+
+  function refresh() {
+    return readTick().then(function (text) {
+      show(String(text).trim());
+    }).catch(function () {
+      show(0);
+    });
+  }
+
+  fetch(tick, {
+    method: "POST",
+    credentials: "omit",
+    cache: "no-store"
+  }).catch(function () {}).then(refresh);
+
+  refresh();
 })();
