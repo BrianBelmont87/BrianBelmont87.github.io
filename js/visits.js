@@ -1,26 +1,26 @@
 /* Site-wide page views. One small request, no cookies, no animation.
-   tick.rs counts the visit with POST, but that answer is a redirect and the
-   old script gave up after 6 seconds, which left the dash on screen.
-   A plain GET shows the number, and the previous Abacus total is only used
-   if tick.rs does not answer. */
+   Shown total = 156 (the old Abacus count) + the tick.rs count.
+   If tick.rs does not answer, the line stays at 156. It never shows a dash
+   and never goes below that old total. */
 (function () {
   var slot = document.querySelector("[data-visits]");
   if (!slot || !window.fetch) {
     return;
   }
 
+  var previousTotal = 156;
   var tick = "https://tick.rs/c/o8w64MeiLWZQ";
-  var abacus = "https://abacus.jasoncameron.dev/get/brianbelmont87.github.io/visits";
-  var shown = false;
 
-  function show(value) {
-    var number = Number(String(value).trim());
-    if (!isFinite(number)) {
-      return false;
+  function show(tickCount) {
+    var extra = Number(tickCount);
+    if (!isFinite(extra) || extra < 0) {
+      extra = 0;
     }
-    slot.textContent = number.toLocaleString("en-US");
-    shown = true;
-    return true;
+    var total = previousTotal + extra;
+    if (total < previousTotal) {
+      total = previousTotal;
+    }
+    slot.textContent = total.toLocaleString("en-US");
   }
 
   function giveUp(ms) {
@@ -29,8 +29,8 @@
     });
   }
 
-  function read(url) {
-    var request = fetch(url, {
+  function readTick() {
+    var request = fetch(tick, {
       method: "GET",
       credentials: "omit",
       cache: "no-store"
@@ -43,22 +43,11 @@
     return Promise.race([request, giveUp(8000)]);
   }
 
-  function showTickOrPrevious() {
-    return read(tick).then(function (text) {
-      if (!show(text)) {
-        throw new Error("bad");
-      }
+  function refresh() {
+    return readTick().then(function (text) {
+      show(String(text).trim());
     }).catch(function () {
-      return read(abacus).then(function (text) {
-        var data = JSON.parse(text);
-        if (!show(data && data.value)) {
-          throw new Error("bad");
-        }
-      });
-    }).catch(function () {
-      if (!shown) {
-        slot.textContent = "—";
-      }
+      show(0);
     });
   }
 
@@ -66,7 +55,7 @@
     method: "POST",
     credentials: "omit",
     cache: "no-store"
-  }).catch(function () {}).then(showTickOrPrevious);
+  }).catch(function () {}).then(refresh);
 
-  showTickOrPrevious();
+  refresh();
 })();
